@@ -1,0 +1,38 @@
+<p-dropdown [options]="langs" [(ngModel)]="selectedLang" [style]="{'width':'150px'}"></p-dropdown>
+<p-schedule id="calendar" [events]="events"  [locale]="selectedLang" [header]="header" [eventLimit]="4" [editable]="true"
+            (onDayClick)="handleDayClick($event)" (onEventClick)="handleEventClick($event)" (onEventDrop)="handleEventDrop($event)" (onEventResize)="handleResizeEvent($event)"></p-schedule>
+<p-dialog header="Event Details" [(visible)]="dialogVisible" [responsive]="true" showEffect="fade" [modal]="false" [contentStyle]="{'overflow':'visible'}"
+          [style]="{'overflow':'visible'}" [resizable]="false">
+  <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="event">
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label for="title">Title</label></div>
+      <div class="ui-grid-col-8">
+        <input name="title" id="title" pInputText  [(ngModel)]="event.title" required/>
+      </div>
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label for="start">Start</label></div>
+      <div class="ui-grid-col-8">
+       <input id="start" [ngModel]="event.start" #start="ngModel" [(dateTimePicker)]="event.start" [returnObject]=" 'string' " [viewFormat]= "'YYYY-MM-DD HH:mm'" [mode]="'dropdown'" required />
+      </div>
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label for="end">End</label></div>
+      <div class="ui-grid-col-8">
+          <input id="end"  #end="ngModel" [ngModel]="event.end" [(dateTimePicker)]="event.end" [returnObject]=" 'string' " [viewFormat]= "'YYYY-MM-DD HH:mm'" [mode]="'dropdown'" [position]=" 'top' "  [disabled]="event.allDay" required />
+        <div *ngIf="end.value < start.value && end.enabled" class="help-block" style="color: red;">End date is incorrect.</div>
+      </div>
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label for="allday">All Day</label></div>
+      <div id="allDay" class="ui-grid-col-8"><p-checkbox  [(ngModel)]="event.allDay" (ngModelChange)="event.end=''" binary="checkbox"></p-checkbox></div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="fa-close" (click)="deleteEvent()" label="Delete" [disabled]="!event?.id"></button>
+      <button  name="save"  type="button" pButton icon="fa-check" (click)="saveEvent()"  label="Save" [disabled]="!event?.start||!event?.title||(event.end != null&&event.end<event.start&&!event.allDay)"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+ERROR in ng:///home/l364cy/WebstormProjects/CRUDAngular/src/app/calendar/calendar.component.html (34,7): Operator '===' cannot be applied to types 'true' and 'false'.
